@@ -14,6 +14,7 @@ export interface Book {
 
 export interface Review {
   id: string;
+  userId?: string;
   userName: string;
   avatar: string;
   comment: string;
@@ -199,6 +200,22 @@ export const books: Book[] = [
     rating: 4.3,
     reviews: [
       { id: "r12", userName: "Life Coach", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop", comment: "Practical advice that actually works.", rating: 4 },
+    ],
+  },
+  {
+    id: "13",
+    title: "Harry Potter and the Sorcerer's Stone",
+    author: "J.K. Rowling",
+    cover: "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1474154022i/3.jpg",
+    description: "Harry Potter has never even heard of Hogwarts when the letters start dropping on the doormat at number four, Privet Drive. Addressed in green ink on yellowish parchment with a purple seal, they are swiftly confiscated by his grisly aunt and uncle. Then, on Harry's eleventh birthday, a great beetle-eyed giant of a man called Rubeus Hagrid bursts in with some astonishing news: Harry Potter is a wizard, and he has a place at Hogwarts School of Witchcraft and Wizardry. An incredible adventure is about to begin!",
+    category: "Fantasy",
+    pages: 275,
+    language: "English",
+    isbn: "0439554934",
+    rating: 4.9,
+    reviews: [
+      { id: "r13-1", userName: "Hermione Granger", avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&h=100&fit=crop", comment: "A brilliant story about magic, bravery, and friendship! A must-read for everyone.", rating: 5 },
+      { id: "r13-2", userName: "Ron Weasley", avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop", comment: "Absolutely wicked! The wizarding chess part was the best.", rating: 5 }
     ],
   },
 ];

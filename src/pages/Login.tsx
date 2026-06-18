@@ -19,13 +19,13 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    const success = await login(email, password);
+    const result = await login(email, password);
     
-    if (success) {
-      toast.success("Welcome back to Livision!");
+    if (result.success) {
+      toast.success("Welcome back to LITVISION!");
       navigate("/home");
     } else {
-      toast.error("Invalid email or password");
+      toast.error(result.error || "Invalid email or password");
     }
     
     setIsLoading(false);
@@ -43,7 +43,7 @@ const Login = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-primary/40" />
         <div className="relative z-10 flex flex-col justify-center p-12 text-primary-foreground">
           <BookOpen className="w-16 h-16 mb-6" />
-          <h1 className="font-serif text-5xl font-bold mb-4">Livision</h1>
+          <h1 className="font-serif text-5xl font-bold mb-4">LITVISION</h1>
           <p className="text-xl opacity-90 max-w-md">
             Discover endless stories, immerse yourself in captivating narratives, and explore new worlds.
           </p>
@@ -55,7 +55,7 @@ const Login = () => {
         <div className="w-full max-w-md animate-fade-in">
           <div className="lg:hidden flex items-center gap-3 mb-8">
             <BookOpen className="w-10 h-10 text-accent" />
-            <h1 className="font-serif text-3xl font-bold text-foreground">Livision</h1>
+            <h1 className="font-serif text-3xl font-bold text-foreground">LITVISION</h1>
           </div>
 
           <h2 className="font-serif text-3xl font-bold text-foreground mb-2">Welcome Back</h2>

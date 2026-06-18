@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { categories } from "@/lib/books";
 import { BookOpen, Compass, Heart, Search, Rocket, Sparkles, Brain } from "lucide-react";
 import libraryBg from "@/assets/library-bg.jpg";
+import { profileApi, getToken } from "@/lib/api";
 
 const iconMap: Record<string, any> = {
   adventure: Compass,
@@ -27,9 +28,16 @@ const ChooseInterests = () => {
     );
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (selected.length > 0) {
       localStorage.setItem("livision_interests", JSON.stringify(selected));
+      if (getToken()) {
+        try {
+          await profileApi.updateInterests(selected);
+        } catch (e) {
+          console.warn("Failed to sync interests to profile:", e);
+        }
+      }
     }
     navigate("/home");
   };

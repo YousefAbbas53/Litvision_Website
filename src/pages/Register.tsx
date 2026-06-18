@@ -32,13 +32,13 @@ const Register = () => {
 
     setIsLoading(true);
 
-    const success = await register(name, email, password);
+    const result = await register(name, email, password);
     
-    if (success) {
-      toast.success("Welcome to Livision!");
+    if (result.success) {
+      toast.success("Welcome to LITVISION!");
       navigate("/onboarding");
     } else {
-      toast.error("Email already exists");
+      toast.error(result.error || "Email already exists");
     }
     
     setIsLoading(false);
@@ -56,7 +56,7 @@ const Register = () => {
         <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-primary/40" />
         <div className="relative z-10 flex flex-col justify-center p-12 text-primary-foreground">
           <BookOpen className="w-16 h-16 mb-6" />
-          <h1 className="font-serif text-5xl font-bold mb-4">Livision</h1>
+          <h1 className="font-serif text-5xl font-bold mb-4">LITVISION</h1>
           <p className="text-xl opacity-90 max-w-md">
             Join thousands of readers exploring new worlds and discovering amazing stories.
           </p>
@@ -68,7 +68,7 @@ const Register = () => {
         <div className="w-full max-w-md animate-fade-in">
           <div className="lg:hidden flex items-center gap-3 mb-8">
             <BookOpen className="w-10 h-10 text-accent" />
-            <h1 className="font-serif text-3xl font-bold text-foreground">Livision</h1>
+            <h1 className="font-serif text-3xl font-bold text-foreground">LITVISION</h1>
           </div>
 
           <h2 className="font-serif text-3xl font-bold text-foreground mb-2">Create Account</h2>

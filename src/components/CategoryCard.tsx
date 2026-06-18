@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Book } from "@/lib/books";
 import { BookOpen } from "lucide-react";
+import { BookCover } from "./BookCover";
 
 interface CategoryCardProps {
   category: { id: string; name: string };
@@ -50,11 +51,7 @@ const CategoryCard = ({ category, books, isSelected, onClick }: CategoryCardProp
                 `,
               }}
             >
-              <img
-                src={book.cover}
-                alt={book.title}
-                className="w-full h-full object-cover"
-              />
+              <BookCover book={book} className="w-full h-full object-cover" />
             </motion.div>
           );
         })}

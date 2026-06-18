@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { useVoiceCloning } from "./VoiceCloningContext";
 import { toast } from "sonner";
 import { useSound } from "@/components/audio/SoundManager";
+import { ttsApi } from "@/lib/api";
 
 interface VoiceSelectionModalProps {
   isOpen: boolean;
@@ -227,20 +228,29 @@ export const VoiceSelectionModal: React.FC<VoiceSelectionModalProps> = ({ isOpen
       }
 
       setIsUploading(true);
+      setError(null);
       
-      // Generic future-ready loading state. This is where a real fetch call to XTTS / Voice Cloning API would go.
-      // We pass the actual standard File object to our context state.
       try {
-        await new Promise((resolve) => setTimeout(resolve, 1500)); // Simulate API network latency
-        setVoiceData(file, fileDuration);
+        // Upload voice sample to backend to get voiceUrl
+        const uploadRes = await ttsApi.uploadVoice(file);
+        const voiceUrl = uploadRes.voiceUrl;
+        
+        if (!voiceUrl) {
+          throw new Error("Failed to get voiceUrl from server");
+        }
+        
+        // Save file, duration, and R2 voiceUrl in context
+        setVoiceData(file, fileDuration, voiceUrl);
         setClonedVoiceActive(true);
+        
         setIsUploading(false);
         onClose();
         navigate(`/tts/${bookId}`);
         toast.success("Custom Voice applied successfully!");
-      } catch (e) {
+      } catch (e: any) {
         setIsUploading(false);
-        setError("Failed to process voice cloning API request.");
+        console.error("Voice upload failed:", e);
+        setError(e.message || "Failed to upload and clone voice sample on the server.");
       }
     }
   };

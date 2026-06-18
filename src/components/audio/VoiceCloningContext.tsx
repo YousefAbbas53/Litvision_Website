@@ -5,8 +5,9 @@ interface VoiceCloningContextType {
   clonedVoiceName: string | null;
   clonedVoiceDuration: number | null;
   clonedVoiceSize: string | null;
+  clonedVoiceUrl: string | null;
   isClonedVoiceActive: boolean;
-  setVoiceData: (file: File, duration: number) => void;
+  setVoiceData: (file: File, duration: number, url: string) => void;
   setClonedVoiceActive: (active: boolean) => void;
   clearVoiceData: () => void;
 }
@@ -15,15 +16,24 @@ const VoiceCloningContext = createContext<VoiceCloningContextType | null>(null);
 
 export const VoiceCloningProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [clonedVoiceFile, setClonedVoiceFile] = useState<File | null>(null);
-  const [clonedVoiceName, setClonedVoiceName] = useState<string | null>(null);
-  const [clonedVoiceDuration, setClonedVoiceDuration] = useState<number | null>(null);
-  const [clonedVoiceSize, setClonedVoiceSize] = useState<string | null>(null);
-  const [isClonedVoiceActive, setIsClonedVoiceActive] = useState<boolean>(false);
+  const [clonedVoiceName, setClonedVoiceName] = useState<string | null>(() => localStorage.getItem("cloned_voice_name"));
+  const [clonedVoiceDuration, setClonedVoiceDuration] = useState<number | null>(() => {
+    const d = localStorage.getItem("cloned_voice_duration");
+    return d ? Number(d) : null;
+  });
+  const [clonedVoiceSize, setClonedVoiceSize] = useState<string | null>(() => localStorage.getItem("cloned_voice_size"));
+  const [clonedVoiceUrl, setClonedVoiceUrl] = useState<string | null>(() => localStorage.getItem("cloned_voice_url"));
+  const [isClonedVoiceActive, setIsClonedVoiceActive] = useState<boolean>(() => localStorage.getItem("cloned_voice_active") === "true");
 
-  const setVoiceData = (file: File, duration: number) => {
+  const setVoiceData = (file: File, duration: number, url: string) => {
     setClonedVoiceFile(file);
     setClonedVoiceName(file.name);
     setClonedVoiceDuration(duration);
+    setClonedVoiceUrl(url);
+    
+    localStorage.setItem("cloned_voice_name", file.name);
+    localStorage.setItem("cloned_voice_duration", String(duration));
+    localStorage.setItem("cloned_voice_url", url);
     
     // Format size
     let sizeStr = "";
@@ -35,10 +45,12 @@ export const VoiceCloningProvider: React.FC<{ children: React.ReactNode }> = ({ 
       sizeStr = `${(file.size / (1024 * 1024)).toFixed(1)} MB`;
     }
     setClonedVoiceSize(sizeStr);
+    localStorage.setItem("cloned_voice_size", sizeStr);
   };
 
   const setClonedVoiceActive = (active: boolean) => {
     setIsClonedVoiceActive(active);
+    localStorage.setItem("cloned_voice_active", String(active));
   };
 
   const clearVoiceData = () => {
@@ -46,7 +58,14 @@ export const VoiceCloningProvider: React.FC<{ children: React.ReactNode }> = ({ 
     setClonedVoiceName(null);
     setClonedVoiceDuration(null);
     setClonedVoiceSize(null);
+    setClonedVoiceUrl(null);
     setIsClonedVoiceActive(false);
+
+    localStorage.removeItem("cloned_voice_name");
+    localStorage.removeItem("cloned_voice_duration");
+    localStorage.removeItem("cloned_voice_url");
+    localStorage.removeItem("cloned_voice_size");
+    localStorage.setItem("cloned_voice_active", "false");
   };
 
   return (
@@ -56,6 +75,7 @@ export const VoiceCloningProvider: React.FC<{ children: React.ReactNode }> = ({ 
         clonedVoiceName,
         clonedVoiceDuration,
         clonedVoiceSize,
+        clonedVoiceUrl,
         isClonedVoiceActive,
         setVoiceData,
         setClonedVoiceActive,

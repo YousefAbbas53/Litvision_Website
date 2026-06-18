@@ -41,7 +41,7 @@ const Sidebar = () => {
         <Link to="/home" className="flex items-center gap-2 lg:gap-3">
           <BookOpen className="w-6 h-6 lg:w-8 lg:h-8 text-accent shrink-0" />
           <span className="font-serif text-lg lg:text-xl font-bold text-sidebar-foreground hidden sm:block">
-            Livision
+            LITVISION
           </span>
         </Link>
       </div>
