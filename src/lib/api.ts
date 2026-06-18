@@ -401,10 +401,10 @@ export interface SummaryResponse {
 }
 
 export const summaryApi = {
-  getSummary: (bookId: string) =>
+  getSummary: (bookId: string, force = false) =>
     apiFetch<SummaryResponse>("/summary", {
       method: "POST",
-      body: JSON.stringify({ bookId }),
+      body: JSON.stringify({ bookId, force }),
     }),
 };
 

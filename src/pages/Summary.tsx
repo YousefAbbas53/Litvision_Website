@@ -70,8 +70,8 @@ const Summary = () => {
     }));
   };
 
-  const fetchSummary = async () => {
-    if (!id || hasFetched.current) return;
+  const fetchSummary = async (force = false) => {
+    if (!id || (hasFetched.current && !force)) return;
     hasFetched.current = true;
     setIsSummaryLoading(true);
     setSummaryError(null);
@@ -91,7 +91,7 @@ const Summary = () => {
 
     try {
       // Call real summary API
-      const res = await summaryApi.getSummary(id);
+      const res = await summaryApi.getSummary(id, force);
 
       // Set full summary text from API response
       setFullSummary(res.finalSummary || null);
@@ -182,7 +182,15 @@ const Summary = () => {
     setSummarySource(null);
     setFullSummary(null);
     setChapters([]);
-    fetchSummary();
+    fetchSummary(true);
+  };
+
+  const handleRegenerate = () => {
+    setSummaryError(null);
+    setSummarySource(null);
+    setFullSummary(null);
+    setChapters([]);
+    fetchSummary(true);
   };
 
   if (!book && !id) {
@@ -286,6 +294,21 @@ const Summary = () => {
                 Full Summary
               </span>
             </button>
+
+            {isGuid(id || "") && (
+              <button
+                onClick={handleRegenerate}
+                onMouseEnter={() => playHover()}
+                disabled={isSummaryLoading}
+                className="w-full sm:w-auto group relative px-6 py-3 border shadow-md rounded-full flex items-center justify-center gap-3 transition-all duration-300 interactive bg-card border-border hover:-translate-y-1 hover:shadow-[0_10px_30px_rgba(245,158,11,0.1)] hover:border-amber-500/50 hover:bg-amber-500/5 disabled:opacity-50"
+                title="Force call API to regenerate summaries"
+              >
+                <RefreshCw className={`w-5 h-5 text-amber-500 group-hover:rotate-180 transition-transform duration-500 ${isSummaryLoading ? "animate-spin" : ""}`} />
+                <span className="font-medium text-foreground group-hover:text-amber-500 transition-colors">
+                  Regenerate
+                </span>
+              </button>
+            )}
           </div>
 
           {/* Dynamic Content */}
